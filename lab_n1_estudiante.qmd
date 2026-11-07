@@ -1,7 +1,7 @@
 ---
 title: "Laboratorio 1 · Organización en estado **Inicial**"
 subtitle: "Escalera de Madurez de Datos — Fundación Altiplano"
-author: "Escribe aquí tu nombre"
+author: "Donovan Perez"
 lang: es
 format:
   html:
@@ -113,7 +113,7 @@ names(fuente)[1:5]       # los nombres de las primeras cinco columnas
 **Pregunta 1.1.** Los encabezados no son encabezados. ¿Qué tiene este archivo encima de
 la tabla, y por qué constituye un problema para cualquier proceso automatizado?
 
-*Tu respuesta:*
+*Tu respuesta:Encima de la tabla hay cuatro filas de adorno, las cuales son: el título “FUNDACIÓN ALTIPLANO”, la nota “Base de contactos - actualizada por Marcela - NO BORRAR”, una fila vacía y “Contactos 2024”. Los encabezados realmente empiezan en la fila 5. Es un problema porque cualquier programa que lea el archivo toma la primera fila como encabezado, así que las columnas quedan con nombres equivocados y los datos no se pueden usar. El archivo está hecho para que lo lea una persona, no una máquina en terminos generales.*
 
 ```{r}
 # TODO 1.2 — Vuelve a leer el archivo saltando las filas decorativas.
@@ -176,7 +176,7 @@ cat("Filas en la hoja:", nrow(borrador),
 que esa decisión la tome el analista, solo, en una línea de código? ¿A quién le
 corresponde?
 
-*Tu respuesta:*
+*Tu respuesta:No realmente, decidir qué es un contacto válido es una decisión del negocio, no del analista, personalmente lo decidí asi porque el código lo necesitaba, pero si por algun motivo la Fundación dice que un contacto sin ID también cuenta, mi filtro estaría dejando gente por fuera y no habria manera de notarlo, le corresponde pues al dueño del dato, pero como se ha venido trabajando ya ese rol no existe, quien más se acerca es Marcela, o la dirección de Desarrollo, que es el área que usa la base.*
 
 ***
 
@@ -276,7 +276,7 @@ validos |>
 comparten ID pero difieren entre sí. ¿Se resuelven de la misma manera? ¿Cuál de los dos
 **no** puede resolverse con código, y por qué?
 
-*Tu respuesta:*
+*Tu respuesta: No se resuelven igual. Las 40 filas idénticas son copias exactas y se pueden borrar con código sin perder nada, pero teniend hay que tener encuenta los otros 25 casos donde el mismo ID tiene datos distintos. Por ejemplo, CT-00024 quienes "Iván Rojas" aparece con dos teléfonos diferentes, en ese caso no se puede resolver con código especificamente, porque el código no sabe cuál de los dos teléfonos es el correcto, entonces de esa manera la forma real de resolverlo seria preguntarle a la persona o a quien capturó el dato.*
 
 ### 2.4 Consistencia
 
@@ -298,7 +298,7 @@ validos |> count(ciudad, sort = TRUE) |> head(10) |> kable()
 fueran ciudades distintas. ¿De quién es el problema: del analista de BI, de quien captura
 el dato, o de la organización?
 
-*Tu respuesta:*
+*Tu respuesta: Personalmente creo que es un problema de la organización. El analista de BI solo muestra lo que recibe, y quien captura el dato escribe como puede, porque nadie le dijo cómo escribir la ciudad, como siempre ocurre cuando los datos se capturan de manera manual, digamos Bogotá aparece de siete formas distintas (Bogotá, bogota, BOGOTA, Bogota D.C., BOG, BOGOTÁ y BOGOTA D.C.) porque no hay una lista de valores permitidos ni una regla de captura. Mientras la Fundación no defina eso, el tablero se va a seguir rompiendo, esto es algo muy comun en bases de datos puesto que como expliqué no hay realmente algo que dictamine la manera exacta en que se debe escribir cada uno de los datos.*
 
 ***
 ## Paso 3 · Limpieza reproducible
@@ -361,7 +361,7 @@ cat("Registros tras limpieza:", nrow(final), "\n")
 **Pregunta 3.2.** ¿Eliminaste los registros con ID repetido o los marcaste para revisión?
 Defiende tu decisión ante una directora que pide «una base limpia para el viernes».
 
-*Tu respuesta:*
+*Tu respuesta: Aquí, siendo el analista no los elimino al 100%, pero si los marco para revisión. Las 40 filas que son copias exactas sí se pueden quitar sin riesgo alguno, pero por otro lado como venía mencionando los 25 casos con el mismo ID y datos distintos no, porque si en caso tal borro uno puedo estar borrando justo el dato bueno. A la directora le diría: “Para el viernes le entrego una base sin copias exactas y con los casos dudosos marcados. Si los borro solo porque si sin algun criterio, le entrego una base que parece limpia pero tiene teléfonos y ciudades equivocados, y eso es objetivamente peor que tenerlos marcados para revision o eliminarlos directamente.”*
 
 ```{r}
 # TODO 3.3 — Construye una tabla ANTES vs DESPUÉS de al menos cuatro indicadores.
@@ -372,7 +372,7 @@ Defiende tu decisión ante una directora que pide «una base limpia para el vier
 **Pregunta 3.4.** Revisa el porcentaje de correos válidos antes y después. ¿Subió? ¿Qué
 indica eso sobre lo que la limpieza **puede** y **no puede** corregir?
 
-*Tu respuesta:*
+*Tu respuesta: No, definitivamente no subió ya que antes de limpiar, el 87,2 % de los correos era válidos, y después sigue pues igual, entonces la limpieza puede arreglar la forma del dato, como poner todo en minúsculas o quitar espacios, pero no puede inventar lo que falta. Si un correo dice xxxxxxxx234correo.com, el código no sabe dónde iba la @, ni si el correo es real, de esta manera pues lo único que puede hacer es marcarlo como inválido. De esta manera si lo que se toma desde un principio esta mal escrito o demás pues nada mas se puede arreglar desde el origen*
 
 ***
 
@@ -392,7 +392,7 @@ código; parte sólo la puede completar el negocio.
 **Pregunta 4.2.** ¿Qué columna de tu diccionario **no puedes completar tú solo**? ¿Qué
 revela eso sobre el estado de gobierno de esta organización?
 
-*Tu respuesta:*
+*Tu respuesta:No puedo completar sola la columna de descripción, la de dominio permitido ni la de responsable. Puedo proponer qué valores debería aceptar la ciudad o el género, pero quien decide eso es el negocio. Y el responsable de cada campo no lo puedo inventar, porque hoy no hay nadie nombrado. Eso muestra que la Fundación está en nivel 1: los datos existen, pero nadie es dueño de ellos ni hay reglas escritas.*
 
 ***
 
@@ -412,12 +412,12 @@ eso.** El objetivo no es llegar al nivel 5: es llegar al **nivel 2**.
 
 **Pregunta 5.2.** Si sólo pudieras ejecutar **una** de tus acciones, ¿cuál eliges y por qué?
 
-*Tu respuesta:*
+*Tu respuesta:personalmente escogería nombrar a Marcela como responsable de la base y de esta manera en conjunto poner un formulario de captura con listas que se puedan desplegar para las varibales de ciudad, género y estado, de esta manera pues por ejemplo si la ciudad se escoge de una lista, ya no puede llegar escrita de 27 formas, no dejarlo que se pueda escribir sino seleccionar dependiendo la ciudad, genero y demas, ya lo que son las demás acciones arreglan el síntoma cada vez que llega un archivo nuevo así se evita que volvamos a caer en la misma situacion.*
 
 **Pregunta 5.3.** Nombra una acción que deliberadamente **dejaste fuera** por no
 corresponder al nivel de madurez de esta organización, y explica por qué.
 
-*Tu respuesta:*
+*Tu respuesta:A ver por este lado yo por fuera crear lo que es un comité de gobierno de datos con una política formal para toda la Fundación, por que? bueno es lo que tendría a la organización más madurade manera que la base no la maneje una sola persona en su computador personal dicho así, sino mas bien montar un comité sin tener primero un responsable y aparte unas reglas básicas sería por ejemplo poner reuniones encima para llevar un orden y que todo este más estructurado*
 
 ***
 
@@ -465,13 +465,13 @@ Arrastra **`ciudad`** a Filas, igual que hiciste con el archivo sin limpiar.
 contenía 27 grafías distintas, para 10 ciudades reales. ¿Cuántas muestra ahora, y a qué
 se debe el cambio?
 
-*Tu respuesta:*
+*Tu respuesta:Realizandolo de esta manera, tableau me muestra 10 ciudades, que son las ciudades reales, segun pude observar y analizar el cambio se debe a que en el código se unificó, o sea las 27 formas de escribirlas quedaron todas indicando lo que tienen que indicar como el ejemplo de la ciudad Bogotá que puse arriba en una de mis respuestasl al principio tableau me arrojaba 14 porque juntaba algunas variantes, como mayúsculas y minúsculas, pero no todas. Por eso salían ciudades repetidas.*
 
 **Pregunta 6.3.** Ese `.csv` lo descargaste y lo subiste manualmente. Si mañana llega
 `contactos_2025.xlsx`, ¿qué parte de este trabajo se repite sola y qué parte hay que
 rehacer a mano? **Esa parte manual es donde se interrumpe el linaje.**
 
-*Tu respuesta:*
+*Tu respuesta:Creo yo que basta con cambiar la ruta del archivo y volver a correr el código, asi pues lo que hay que rehacer a mano es descargar entonces el CSV de posit y despues subirlo a tableau, segun yo haciendolo asi pues manualmente se interrumpe el linaje, porque ya no queda registro de qué archivo se subió, cuándo ni quién lo subió respectivamente.*
 
 ***
 
